@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<title>Programmer lives healthy</title>
+		<link href="/css/styles.css" rel="stylesheet" />
+		<link href="/css/custom.css" rel="stylesheet" />
+		<link rel="icon" type="/image/x-icon" href="/assets/img/favicon.png" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojione@3.1.2/extras/css/emojione.min.css" />
+		<script src="https://cdn.jsdelivr.net/npm/emojione@3.1.2/lib/js/emojione.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+	</head>
+	<body class="nav-fixed">
+		<nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+			<a class="navbar-brand d-sm-block" href="/"><i class="mr-2" data-feather="codesandbox"></i>Programmer lives healthy</a>
+			<ul class="navbar-nav align-items-center ml-auto">
+				<li class="nav-item dropdown no-caret mr-1 dropdown-notifications">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+						<h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="bell"></i>系统通知
+						</h6>
+						<a th:each="adminMessage : ${adminMessageList}" class="dropdown-item dropdown-notifications-item" href="#!">
+							<div class="dropdown-notifications-item-icon bg-success"><i data-feather="activity"></i></div>
+							<div class="dropdown-notifications-item-content">
+								<div class="dropdown-notifications-item-content-details" th:text="${#dates.format(adminMessage.getGmtCreate(), 'yyyy-MM-dd HH:mm')}"></div>
+								<div class="dropdown-notifications-item-content-text" th:text="${adminMessage.getContent()}">
+									这是一条系统通知，此功能正在开发中
+								</div>
+							</div>
+						</a>
+						<a class="dropdown-item dropdown-notifications-footer" href="/message">查看更多通知</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown no-caret mr-1 dropdown-notifications">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="mail"></i></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
+						<h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="mail"></i>我的消息
+						</h6>
+						<a th:each="commonMessage : ${commonMessageList}" class="dropdown-item dropdown-notifications-item" href="#!"><img
+							 class="dropdown-notifications-item-img" th:src="@{${commonMessage.getFromUser().getAvatar()}}" />
+							<div class="dropdown-notifications-item-content">
+								<div class="dropdown-notifications-item-content-text" th:text="${commonMessage.getContent()}"></div>
+								<div class="dropdown-notifications-item-content-details" th:text="${commonMessage.getFromUser().getUsername()} + ' · ' +${#dates.format(commonMessage.getGmtCreate(), 'HH:mm')}"></div>
+							</div>
+						</a>
+						<a class="dropdown-item dropdown-notifications-footer" href="/message">查看全部消息</a>
+					</div>
+				</li>
+				<!-- 用户 -->
+				<li class="nav-item dropdown no-caret ml-1 dropdown-user">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" th:src="@{${user.avatar}}" /></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+						<h6 class="dropdown-header d-flex align-items-center">
+							<img class="dropdown-user-img" th:src="@{${user.avatar}}" />
+							<div class="dropdown-user-details">
+								<div class="dropdown-user-details-name" th:text="${user.username}"></div>
+								<div class="dropdown-user-details-email" th:text="${user.email}"></div>
+							</div>
+						</h6>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" th:href="@{/userinfo(id=${user.id})}">
+							<div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+							账户
+						</a><a class="dropdown-item" href="/logout">
+							<div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+							退出
+						</a>
+					</div>
+				</li>
+			</ul>
+		</nav>
+		<div id="layoutSidenav">
+			<div id="layoutSidenav_content">
+				<main>
+					<div class="container-fluid mt-3">
+						<div class="card mb-4 nitai1">
+							<div class="card-header">
+								<i data-feather="save" class="mr-2"></i>
+								管理群组
+							</div>
+							<div class="alert alert-success alert-dismissible alert-custom" th:if="${not #strings.isEmpty(msg)}">
+								<button type="button" class="close close-custom" data-dismiss="alert" 
+								style="padding: 0.75rem; margin-right: 0.75rem;">&times;</button>
+								<span th:text="${msg}" class="ml-4 mt-3" ></span>
+							</div>
+							<div class="card-body">
+								<div class="datatable table-responsive">
+									<table class="table table-bordered table-hover" width="100%" cellspacing="0">
+										<thead>
+											<tr class="text-primary">
+												<th>群组名称</th>
+												<th>群主用户名</th>
+												<th>群组介绍</th>
+												<th>群组公告</th>
+												<th>未打卡所需金额</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody th:each="group : ${groups}">
+											<tr>
+												<td class="td-limit-sm">
+													<a th:text="${group.getGroupName()}" th:href="@{/group(id=${group.getId()})}"></a>
+												</td>
+												<td class="td-limit-sm">
+													<a th:text="${group.getCreator().getUsername()}" th:href="@{/userinfo(id=${group.getCreator().getId()})}"></a>
+												</td>
+												<td th:text="${group.getIntro()}" class="td-limit"></td>
+												<td th:text="${group.getNotice()}" class="td-limit"></td>
+												<td th:text="${group.getMoney()}" class="td-limit-sm"></td>
+												<td class="td-limit-sm">
+													<a th:if="${user.getId()} == ${group.getCreator().getId()}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2" th:href="@{/toInvite(groupId=${group.getId()})}">
+														<i data-feather="plus-square" class="text-success"></i>
+													</a>
+													<a th:if="${user.getId()} == ${group.getCreator().getId()}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2" th:href="@{/toUpdateGroup(groupId=${group.getId()})}">
+														<i data-feather="edit" class="text-primary"></i>
+													</a>
+													<a class="btn btn-datatable btn-icon btn-transparent-dark" onclick="forbid()">
+														<i data-feather="trash-2" class="text-danger"></i>
+													</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+				<footer class="footer mt-auto footer-light">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-6 small">Copyright &copy; 2020 友人 & 饭盒君 联合出品</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+		<script src="/js/jquery-3.4.1.js"></script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="/js/scripts.js"></script>
+		<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+		<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+		<script src="/assets/demo/datatables-demo.js"></script>
+		<script type="text/javascript">
+			function forbid() {
+				alert("您暂时没有权限进行此操作!");
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<title>Programmer lives healthy</title>
+		<link href="/css/styles.css" rel="stylesheet" />
+		<link href="/css/custom.css" rel="stylesheet" />
+		<link rel="icon" type="/image/x-icon" href="/assets/img/favicon.png" />
+		<script src="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+	</head>
+	<body class="nav-fixed">
+		<nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+			<a class="navbar-brand d-sm-block navicon" href="/">
+				<i class="mr-2" data-feather="codesandbox"></i>Programmer lives healthy
+			</a>
+			<ul class="navbar-nav align-items-center ml-auto">
+				<li class="nav-item dropdown no-caret mr-1 dropdown-notifications">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+						<h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="bell"></i>系统通知</h6>
+						<a th:each="adminMessage : ${adminMessageList}" class="dropdown-item dropdown-notifications-item" href="/message">
+							<div class="dropdown-notifications-item-icon ">
+								<img class="dropdown-notifications-item-img m-0" th:src="@{${adminMessage.getFromUser().getAvatar()} }" />
+							</div>
+							<div class="dropdown-notifications-item-content">
+								<div class="dropdown-notifications-item-content-details" th:text="${#dates.format(adminMessage.getGmtCreate(), 'yyyy-MM-dd HH:mm')}"></div>
+								<div class="dropdown-notifications-item-content-text" th:text="${adminMessage.getContent()}"></div>
+							</div>
+						</a>
+						<a class="dropdown-item dropdown-notifications-footer" href="/message">查看更多通知</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown no-caret mr-1 dropdown-notifications">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="mail"></i></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
+						<h6  class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="mail"></i>我的消息</h6>
+						<a th:each="commonMessage : ${commonMessageList}" class="dropdown-item dropdown-notifications-item" href="/message">
+							<img class="dropdown-notifications-item-img" th:src="@{${commonMessage.getFromUser().getAvatar()}}" />
+							<div class="dropdown-notifications-item-content">
+								<div class="dropdown-notifications-item-content-text" th:text="${commonMessage.getContent()}"></div>
+								<div class="dropdown-notifications-item-content-details" th:text="${commonMessage.getFromUser().getUsername()} + ' · ' +${#dates.format(commonMessage.getGmtCreate(), 'HH:mm')}"></div>
+							</div>
+						</a>
+						<a class="dropdown-item dropdown-notifications-footer" href="/message">查看全部消息</a>
+					</div>
+				</li>
+				<!-- 用户 -->
+				<li class="nav-item dropdown no-caret ml-1 dropdown-user">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" th:src="@{${user.avatar}}" /></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+						<h6 class="dropdown-header d-flex align-items-center">
+							<img class="dropdown-user-img" th:src="@{${user.avatar}}" />
+							<div class="dropdown-user-details">
+								<div class="dropdown-user-details-name" th:text="${user.username}"></div>
+								<div class="dropdown-user-details-email" th:text="${user.email}"></div>
+							</div>
+						</h6>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" th:href="@{/userinfo(id=${user.id})}">
+							<div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+							账户
+						</a><a class="dropdown-item" href="/logout">
+							<div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+							退出
+						</a>
+					</div>
+				</li>
+			</ul>
+		</nav>
+		<div id="layoutSidenav">
+			<div id="layoutSidenav_content">
+				<main>
+<!--					page-header pb-10 page-header-dark bg-gradient-primary-to-secondary-->
+					<div class="page-header pb-10 page-header-dark index-div-bg">
+						<div class="container-fluid">
+							<div class="page-header-content">
+								<h1 class="page-header-title row">
+									<div class="col-xl-4 col-md-6 col-sm-12 col-h-mg-1">
+										<span class="title">
+											程序员，活久点<span class="ttsmall">Release</span>
+										</span>
+										<br>
+										<span class="sub-title">坚持锻炼，身体是革命的本钱</span>
+									</div>
+									<div class="col-xl-8 col-md-6 col-sm-12">
+										<img src="https://s1.ax1x.com/2020/06/27/N6jIC4.png" class="header-img img-fluid">
+									</div>
+								</h1>
+							</div>
+						</div>
+					</div>
+
+					<div class="page-header pb-10 page-header-dark bg-light">
+						<div class="container-fluid">
+							<div class="page-header-content">
+								<div class="page-header-subtitle text-dark " style="padding: 0.5rem 0;">
+									<div class="my tticon">
+										<i class="mr-2" data-feather="heart"></i>
+										<span>我加入的群组</span>
+									</div>
+
+									<button class="btn btn-primary mr-2 my-1 add-group bticon" type="button">
+										<a href="/group/add" style="color: white;">
+											<i class="mr-2" data-feather="plus"></i>
+											添加群组
+										</a>
+									</button>
+									<button class="btn btn-primary mr-2 my-1 add-group bticon" type="button">
+										<a href="/group/manage" style="color: white;">
+											<i class="mr-2" data-feather="settings"></i>
+											管理群组
+										</a>
+									</button>
+									<div style="clear: both;"></div>
+								</div>
+								<div class="row">
+									<div th:each="group: ${groups}" class="col-xl-2 col-md-4 col-sm-6 col-h-mg-1">
+										<div class="card nitai1">
+											<div class="card-header card-header-h line-limit-length" th:text="${group.getGroupName()}"></div>
+											<div class="card-body">
+												<div class="card-body-main" th:text="${group.getIntro()}">
+
+												</div>
+												<div class="card-body-footer">
+													<span id="invitecode" class="txt-qz" th:text="'邀请码: ' + ${group.getCode()}">
+														<textarea id="hiddencode" style="display: none;"></textarea>
+													</span>
+													<a class="btn btn-info mr-2 my-1 btn-go text-white" th:href="@{/group(id=${group.id})}">
+														进入
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</main>
+				<footer class="footer mt-auto footer-light">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-6 small">Copyright &copy; 2020 友人 & 饭盒君 联合出品</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+		<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="/js/scripts.js"></script>
+	</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<title>创建群组 - Programmer lives healthy</title>
+		<link href="/css/styles.css" rel="stylesheet" />
+		<link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
+		<script src="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+	</head>
+	<body class="bg-primary">
+		<div id="layoutAuthentication">
+			<div id="layoutAuthentication_content">
+				<main>
+					<div class="container">
+						<div class="row justify-content-center">
+							<!-- Create Organization-->
+							<div class="col-xl-5 col-lg-6 col-md-8 col-sm-11">
+								<div class="card mt-5">
+									<div class="card-body p-5 text-center">
+										<div class="icons-org-create align-items-center mx-auto mt-auto"><i class="icon-users" data-feather="users"></i><i
+												class="icon-plus fas fa-plus"></i></div>
+										<div class="h3 text-primary font-weight-300 mb-0">创建群组</div>
+									</div>
+									<hr class="m-0" />
+									<div class="card-body p-5">
+										<form method="post" action="/group/create">
+											<div class="form-group"><input class="form-control form-control-solid" name="groupName" type="text"
+												 placeholder="输入新群组的名称..." aria-label="Organization Name" aria-describedby="orgNameExample" /></div>
+											<div class="form-group"><input class="form-control form-control-solid" name="intro" type="text" placeholder="群组介绍..."
+												 aria-label="Organization Name" aria-describedby="orgNameExample" /></div>
+											<div class="form-group"><input class="form-control form-control-solid" name="notice" type="text" placeholder="群组公告..."
+												 aria-label="Organization Name" aria-describedby="orgNameExample" /></div>
+											<div class="form-group"><input class="form-control form-control-solid" name="money" type="text" placeholder="未能打卡惩罚金额..."
+																		   aria-label="Organization Name" aria-describedby="orgNameExample" /></div>
+											<p th:text="${msg}" style="color: red" th:if="${not #strings.isEmpty(msg)}"></p>
+											<button class="btn btn-block btn-primary" type="submit">创建</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+			</div>
+			<div id="layoutAuthentication_footer">
+				<footer class="footer mt-auto footer-light">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-6 small">Copyright &copy; 2020 友人 & 饭盒君 联合出品</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+		<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="/js/scripts.js"></script>
+	</body>
+</html>

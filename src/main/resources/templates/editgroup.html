@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<title>Programmer lives healthy</title>
+		<link href="/css/styles.css" rel="stylesheet" />
+		<link href="/css/custom.css" rel="stylesheet" />
+		<link rel="icon" type="/image/x-icon" href="/assets/img/favicon.png" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojione@3.1.2/extras/css/emojione.min.css" />
+		<script src="https://cdn.jsdelivr.net/npm/emojione@3.1.2/lib/js/emojione.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+	</head>
+	<body class="bg-primary">
+		<div id="layoutSidenav">
+			<div id="layoutSidenav_content">
+				<main>
+					<div class="container-fluid mt-3">
+						<div class="row justify-content-center">
+							<div class="col-xl-4 col-md-6 col-sm-12">
+								<div class="card mb-4 nitai2">
+									<form action="/group/update" method="post">
+										<div class="card-header">修改群组信息</div>
+										<div class="card-body">
+											<div class="row">
+												<div class="col-12">
+													<div class="input-group mb-3">
+														<div class="input-group-prepend">
+															<span class="input-group-text align-eqwidth">群组名称</span>
+															<input id="groupId" name="groupId" type="hidden" th:value="${group.getId()}">
+														</div>
+														<input type="text"  class="form-control roundbd-l dis-plain" id="groupName" name="groupName" th:value="${group.getGroupName()}">
+													</div>
+													<div class="input-group mb-3">
+														<div class="input-group-prepend">
+															<span class="input-group-text align-eqwidth">未打卡金额</span>
+														</div>
+														<input type="text"  class="form-control roundbd-l dis-plain" id="groupMoney" name="groupMoney" th:value="${group.getMoney()}">
+													</div>
+													<div class="input-group mb-3">
+														<div class="input-group-prepend">
+															<span class="input-group-text align-eqwidth align-txtarea">群组介绍</span>
+														</div>
+														<textarea rows="5" class="form-control roundbd-l dis-plain" id="groupIntro" name="groupIntro" th:text="${group.getIntro()}"></textarea>
+													</div>
+													<div class="input-group mb-3">
+														<div class="input-group-prepend">
+															<span class="input-group-text align-eqwidth align-txtarea">群组公告</span>
+														</div>
+														<textarea rows="5" class="form-control roundbd-l dis-plain" id="groupNotice" name="groupNotice" th:text="${group.getNotice()}"></textarea>
+													</div>
+												</div>
+											</div>
+											<p th:text="${msg}" style="color: red" th:if="${not #strings.isEmpty(msg)}"></p>
+											<div class="row justify-content-center" id="changepanel">
+												<button type="submit" id="confirmchange" class="btn btn-primary mr-5">修改</button>
+												<a type="button"  class="btn btn-secondary" href="/group/manage">取消</a>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+				<footer class="footer mt-auto footer-light">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-6 small">Copyright &copy; 2020 友人 & 饭盒君 联合出品</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+		<script src="/js/jquery-3.4.1.js"></script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="/js/scripts.js"></script>
+	</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<title>Programmer lives healthy</title>
+		<link href="/css/styles.css" rel="stylesheet" />
+		<link href="/css/custom.css" rel="stylesheet" />
+		<link rel="icon" type="/image/x-icon" href="/assets/img/favicon.png" />
+		<script src="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+	</head>
+	<body class="nav-fixed">
+		<nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+			<a class="navbar-brand d-sm-block" href="/"><i class="mr-2" data-feather="codesandbox"></i>Programmer lives healthy</a>
+			<ul class="navbar-nav align-items-center ml-auto">
+				<li class="nav-item dropdown no-caret mr-1 dropdown-notifications">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+						<h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="bell"></i>系统通知</h6>
+						<a th:each="adminMessage : ${adminMessageList}" class="dropdown-item dropdown-notifications-item" href="/message">
+							<div class="dropdown-notifications-item-icon ">
+								<img class="dropdown-notifications-item-img m-0" th:src="@{${adminMessage.getFromUser().getAvatar()} }" />
+							</div>
+							<div class="dropdown-notifications-item-content">
+								<div class="dropdown-notifications-item-content-details" th:text="${#dates.format(adminMessage.getGmtCreate(), 'yyyy-MM-dd HH:mm')}"></div>
+								<div class="dropdown-notifications-item-content-text" th:text="${adminMessage.getContent()}"></div>
+							</div>
+						</a>
+						<a class="dropdown-item dropdown-notifications-footer" href="/message">查看更多通知</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown no-caret mr-1 dropdown-notifications">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="mail"></i></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
+						<h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="mail"></i>我的消息</h6>
+						<a th:each="commonMessage : ${commonMessageList}" class="dropdown-item dropdown-notifications-item" href="/message">
+							<img class="dropdown-notifications-item-img" th:src="@{${commonMessage.getFromUser().getAvatar()}}" />
+							<div class="dropdown-notifications-item-content">
+								<div class="dropdown-notifications-item-content-text" th:text="${commonMessage.getContent()}"></div>
+								<div class="dropdown-notifications-item-content-details" th:text="${commonMessage.getFromUser().getUsername()} + ' · ' +${#dates.format(commonMessage.getGmtCreate(), 'HH:mm')}"></div>
+							</div>
+						</a>
+						<a class="dropdown-item dropdown-notifications-footer" href="/message">查看全部消息</a>
+					</div>
+				</li>
+				<!-- 用户 -->
+				<li class="nav-item dropdown no-caret ml-1 dropdown-user">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" th:src="@{${user.avatar}}" /></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+						<h6 class="dropdown-header d-flex align-items-center">
+							<img class="dropdown-user-img" th:src="@{${user.avatar}}" />
+							<div class="dropdown-user-details">
+								<div class="dropdown-user-details-name" th:text="${user.username}"></div>
+								<div class="dropdown-user-details-email" th:text="${user.email}"></div>
+							</div>
+						</h6>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" th:href="@{/userinfo(id=${user.id})}">
+							<div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+							账户
+						</a><a class="dropdown-item" href="/logout">
+							<div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+							退出
+						</a>
+					</div>
+				</li>
+			</ul>
+		</nav>
+		<div id="layoutSidenav">
+			<div id="layoutSidenav_content">
+				<main>
+					<div class="row">
+						<div class="col-xl-8 col-md-12 col-sm-12">
+							<div class="card mt-3 ml-3 mr-3 nitai1">
+								<div class="card-header"><i class="mr-2" data-feather="users"></i>群组信息</div>
+								<div class="card-body bd-h">
+									<p th:text="'群组名称: ' + ${group.getGroupName()}"></p>
+									<p th:text="'群组介绍:' + ${group.getIntro()}"></p>
+									<p th:text="'群组代码:' + ${group.getCode()}"></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-4 col-md-12 col-sm-12">
+							<div class="card mt-3 ml-3 mr-3 nitai1">
+								<div class="card-header"><i class="mr-2" data-feather="user"></i>群主信息</div>
+								<div class="card-body bd-h row">
+									<div class="col-xl-3 col-md-2 text-center">
+										<img class="img-fluid show-avatar rounded" th:src="@{${groupLeader.getAvatar()}}" />
+									</div>
+									<div class="col-xl-9 col-md-10">
+										<div class="dropdown-user-details">
+											<div class="dropdown-user-details-name">
+												<a class="plain-gray-a" th:href="@{/userinfo(id=${groupLeader.id})}" th:text="${groupLeader.getUsername()}"></a>
+											</div>
+											<div class="dropdown-user-details-email" th:text="${groupLeader.getBio()}"></div>
+											<div class="dropdown-user-details-email" th:text="${groupLeader.getEmail()}"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="alert alert-primary border-0 mb-4 mt-3 px-md-5">
+						<div class="position-relative">
+							<div class="row align-items-center justify-content-between">
+								<div class="col position-relative">
+									<h2 class="text-primary">欢迎回来,快点上传今天的成果吧!</h2>
+									<p class="text-gray-700" th:text="'群组公告: ' + ${group.getNotice()}"></p>
+									<form action="" method="">
+										<div class="form-group">
+											<label for="selectShow" class="text-gray-700">
+												选择查看类型：
+											</label>
+											<select class="form-control form-selshow" id="selectShow" onchange="preloadComment(event)">
+												<option value="no">未选择</option>
+												<option value="rec7">我的近7天记录</option>
+												<option value="rec14">我的近14天记录</option>
+												<option value="rec30">我的近30天记录</option>
+												<option value="recall">我的全部记录</option>
+												<option value="now">返回当天记录</option>
+											</select>
+										</div>
+									</form>
+								</div>
+								<div class="col d-none d-md-block text-right pt-3"><img class="img-fluid mt-n5" src="/assets/img/upload.png"
+									 style="max-width: 25rem;" /></div>
+							</div>
+						</div>
+					</div>
+					<!-- col-xl-8 col-md-12 col-sm-12 -->
+					<div id="pcomment">
+						<div class="row" th:fragment="comment" id="comment">
+							<div class="col-xl-8 col-md-12 col-sm-12">
+								<div class="mt-3 mb-3 ml-3 mr-3 text-center" th:if="${#lists.isEmpty(commentsList)}">
+									<img src="https://s1.ax1x.com/2020/07/02/Nqdw60.png" class="img-fluid mxw-40">
+									<h1>该选项下当前群组暂无打卡记录</h1>
+								</div>
+								<div class="card mt-3 mb-3 ml-3 mr-3 nitai1" th:each="comment : ${commentsList}">
+									<div class="row no-gutters">
+										<div class="col-md-4 text-center">
+											<a th:href="@{${comment.getImg()}}">
+												<img class="img-fluid mxh-40" th:src="@{${comment.getImg()}}">
+											</a>
+										</div>
+										<div class="col-md-8 card-body">
+											<h5 class="card-title row">
+												<div class="col-xl-2 col-lg-3 text-center ml-3 mb-3">
+													<a th:href="@{/userinfo(id=${comment.getUser().getId()})}">
+														<img class="img-fluid show-avatar rounded" th:src="@{${comment.getUser().getAvatar()}}" />
+													</a>
+												</div>
+												<div class="col-xl-8 col-md-12 ht-info ml-4 mr-3">
+													<p>
+														<a class="plain-a" th:href="@{/userinfo(id=${comment.getUser().getId()})}" th:text="${comment.getUser().getUsername()}"></a>
+													</p>
+													<p th:text="'简介: ' + ${comment.getUser().getBio()}"></p>
+													<p th:text="${#dates.format(comment.getGmtCreate(), 'yyyy-MM-dd HH:mm')}"></p>
+												</div>
+											</h5>
+											<div class="card-body row ml-1 pt-0">
+												<p class="card-text" th:text="${comment.getContent()}"></p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 当加载历史记录时显示的 -->
+							<div class="col-xl-4 col-md-12 col-sm-12" th:if="${#lists.isEmpty(statList)}">
+								<div class="mt-3 mb-3 ml-3 mr-3">
+									<div class="row card card-header-actions mx-auto nitai1">
+										<div class="card-header">
+											历史记录
+											<div>
+												<button class="btn btn-pink btn-icon mr-2">
+													<i data-feather="heart"></i>
+												</button>
+												<button class="btn btn-teal btn-icon mr-2">
+													<i data-feather="bookmark"></i>
+												</button>
+												<button class="btn btn-blue btn-icon">
+													<i data-feather="share"></i>
+												</button>
+											</div>
+										</div>
+										<div class="card-body">
+											🔥凡是新的事情在起头总是这样一来的，起初热心的人很多，而不久就冷淡下去，撒手不做了，因为他已经明白，不经过一番苦工是做不成的，而只有想做的人，才忍得过这番痛苦。<br><br>
+											你的坚持正在被记录，耐心和恒心总会得到报酬的，继续加油💪!<br>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-4 col-md-12 col-sm-12" th:if="!${#lists.isEmpty(statList)}">
+								<div class="mt-3 mb-3 ml-3 mr-3">
+									<div class="row">
+										<div class="col-12">
+											<div class="card mb-4 bangdan nitai1" style="min-height: 20rem;">
+												<div class="card-header"><i class="mr-2" data-feather="activity"></i>数据统计</div>
+												<div class="card-body" th:each="stat: ${statList}">
+													<div class="row">
+														<div class="col-xl-3 col-md-2 text-center">
+															<img class="img-fluid show-avatar rounded" th:src="@{${stat.getAvatar()}}" />
+														</div>
+														<div class="col-xl-9 col-md-10">
+															<span th:text="1 + ${statStat.index}"></span>.&nbsp;
+															<span>
+																<a class="plain-rank-a" th:href="@{/userinfo(id=${stat.getId()})}" th:text="${stat.getUsername()}"></a>
+															</span>
+															<div th:text="'打卡天数: ' + ${stat.getTotalDay()} + '天'"></div>
+															<div th:text="'损失红包: ' + ${stat.getTotalMoney()} + '元'"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-12">
+											<div class="card mb-4 nitai1" style="min-height: 20rem;">
+												<div class="card-header"><i class="mr-2" data-feather="award"></i>今日榜单</div>
+												<div class="card-body" th:each="stat: ${statList}">
+													<div class="row">
+														<div class="col-xl-3 col-md-2 text-center">
+															<img class="img-fluid show-avatar rounded" th:src="@{${stat.getAvatar()}}" />
+														</div>
+														<div class="col-xl-9 col-md-10">
+															<div>
+																<a class="plain-rank-a" th:href="@{/userinfo(id=${stat.getId()})}" th:text="${stat.getUsername()}"></a>
+															</div>
+															<div class="text-success" th:if="${stat.getSign()} eq '1'">
+																已打卡<br>
+																完成时间：<span th:text="${#dates.format(stat.getSignTime(), 'MM-dd HH:mm')}"></span>
+															</div>
+															<div class="text-danger" th:if="${stat.getSign()} eq '0'">
+																未打卡<br>
+																今天要记得打卡哦
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="emoji" id="emoji"></div>
+						<div class="col-xl-8 col-md-12 mb-3">
+							<div class="card mt-3 ml-3 mr-3 nitai1">
+								<form>
+									<div class="card-header">
+										<label for="content" class="navicon">
+											<i class="mr-2" data-feather="share"></i>发布你的记录...
+										</label>
+									</div>
+									<div class="card-body">
+										<div class="form-group">
+											<div class="row">
+												<div class="col-12">
+													<textarea class="form-control form-control-solid" rows="3" id="content"></textarea>
+													<input type="hidden" id="userId" th:value="${user.id}">
+													<input type="hidden" id="groupId" th:value="${group.id}">
+												</div>
+												<!--												<div class="col-1">-->
+												<!--													<button class="btn btn-info btn-icon mt-4" type="button" onclick="showEmoji()">-->
+												<!--														<i class="m-2" data-feather="smile"></i>-->
+												<!--													</button>-->
+												<!--												</div>-->
+											</div>
+										</div>
+										<div class="form-group row">
+											<div class="col-12">
+												<img src="https://s1.ax1x.com/2020/06/30/NI4HGF.png" id="fileImg" class="img-fluid show-avatar">
+												<p class="mt-3" id="postinfo">上传截图预览</p>
+											</div>
+											<div class="col-xl-6 col-md-12">
+											</div>
+										</div>
+										<div class="form-group row">
+											<div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 mb-3">
+												<label for="img" class="btn btn-primary btn-icon mb-0">+</label>
+												点击上传...<input type="file" class="form-control-file" id="img">
+											</div>
+											<div class="col-xl-9 col-lg-8 col-md-12 col-sm-12">
+												<button id="postbtn" class="btn btn-green btn-icon" type="button" onclick="post()">
+													<div class="loading" id="loading"></div>
+													<div class="send" id="send">√</div>
+												</button>
+												<span>点击发送</span>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="col-xl-8 col-md-12">
+
+						</div>
+					</div>
+				</main>
+				<footer class="footer mt-auto footer-light">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-6 small">Copyright &copy; 2020 友人 & 饭盒君 联合出品</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+		<!--		<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>-->
+		<script src="/js/jquery-3.4.1.js"></script>
+		<script src="js/emoji-panel.js"></script>
+		<script>
+			$("#img").on("change", function() {
+				const maxsize = 10 * 1024 * 1024;
+				let size = this.files[0].size;
+
+				//截取路径，获取预览图
+				let urlArr = this.value.split("\\");
+				if (this && this.files && this.files[0]) {
+					let fileUrl = URL.createObjectURL(this.files[0]);
+					document.getElementById("fileImg").src = fileUrl;
+				}
+
+				if (size > maxsize) {
+					document.getElementById("postinfo").innerHTML = "这个图片太大了，请换一张！";
+					document.getElementById("postinfo").style.color = "#e81500";
+					document.getElementById("postbtn").disabled = true;
+				} else {
+					document.getElementById("postinfo").innerHTML = "上传截图预览";
+					document.getElementById("postinfo").style.color = "#687281";
+					document.getElementById("postbtn").disabled = false;
+				}
+
+			});
+
+			$('.emoji').children().click((emoji) => {
+				if (emoji.target.tagName == "IMG") {
+					let str = $('#content').val();
+					$('#content').val(str + emoji.target.alt);
+				} else {
+					return;
+				}
+			})
+		</script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="/js/scripts.js"></script>
+		<script src="/js/comment.js"></script>
+	</body>
+</html>

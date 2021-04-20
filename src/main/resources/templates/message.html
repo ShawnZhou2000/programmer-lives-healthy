@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<title>Programmer lives healthy</title>
+		<link href="/css/styles.css" rel="stylesheet" />
+		<link href="/css/custom.css" rel="stylesheet" />
+		<link rel="icon" type="/image/x-icon" href="/assets/img/favicon.png" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojione@3.1.2/extras/css/emojione.min.css" />
+		<script src="https://cdn.jsdelivr.net/npm/emojione@3.1.2/lib/js/emojione.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+	</head>
+	<body class="nav-fixed">
+		<nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+			<a class="navbar-brand d-sm-block" href="/"><i class="mr-2" data-feather="codesandbox"></i>Programmer lives healthy</a>
+			<ul class="navbar-nav align-items-center ml-auto">
+				<li class="nav-item dropdown no-caret mr-1 dropdown-notifications">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+						<h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="bell"></i>系统通知
+						</h6>
+						<a th:each="adminMessage : ${adminMessageList}" class="dropdown-item dropdown-notifications-item" href="#!">
+							<div class="dropdown-notifications-item-icon bg-success"><i data-feather="activity"></i></div>
+							<div class="dropdown-notifications-item-content">
+								<div class="dropdown-notifications-item-content-details" th:text="${#dates.format(adminMessage.getGmtCreate(), 'yyyy-MM-dd HH:mm')}"></div>
+								<div class="dropdown-notifications-item-content-text" th:text="${adminMessage.getContent()}">
+									这是一条系统通知，此功能正在开发中
+								</div>
+							</div>
+						</a>
+						<a class="dropdown-item dropdown-notifications-footer" href="/message">查看更多通知</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown no-caret mr-1 dropdown-notifications">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="mail"></i></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
+						<h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="mail"></i>我的消息
+						</h6>
+						<a th:each="commonMessage : ${commonMessageList}" class="dropdown-item dropdown-notifications-item" href="#!"><img
+							 class="dropdown-notifications-item-img" th:src="@{${commonMessage.getFromUser().getAvatar()}}" />
+							<div class="dropdown-notifications-item-content">
+								<div class="dropdown-notifications-item-content-text" th:text="${commonMessage.getContent()}"></div>
+								<div class="dropdown-notifications-item-content-details" th:text="${commonMessage.getFromUser().getUsername()} + ' · ' +${#dates.format(commonMessage.getGmtCreate(), 'HH:mm')}"></div>
+							</div>
+						</a>
+						<a class="dropdown-item dropdown-notifications-footer" href="/message">查看全部消息</a>
+					</div>
+				</li>
+				<!-- 用户 -->
+				<li class="nav-item dropdown no-caret ml-1 dropdown-user">
+					<a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);"
+					 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" th:src="@{${user.avatar}}" /></a>
+					<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+						<h6 class="dropdown-header d-flex align-items-center">
+							<img class="dropdown-user-img" th:src="@{${user.avatar}}" />
+							<div class="dropdown-user-details">
+								<div class="dropdown-user-details-name" th:text="${user.username}"></div>
+								<div class="dropdown-user-details-email" th:text="${user.email}"></div>
+							</div>
+						</h6>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" th:href="@{/userinfo(id=${user.id})}">
+							<div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+							账户
+						</a><a class="dropdown-item" href="/logout">
+							<div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+							退出
+						</a>
+					</div>
+				</li>
+			</ul>
+		</nav>
+		<div id="layoutSidenav">
+			<div id="layoutSidenav_content">
+				<main>
+					<form action="/updateUserInfo" method="post" enctype="multipart/form-data">
+						<div class="container">
+							<div class="row justify-content-center">
+								<div class="col-12">
+									<div class="card my-5">
+										<div class="card-header">
+											<div class="navicon">
+												<i class="mr-2" data-feather="message-circle"></i>消息通知
+											</div>
+										</div>
+										<!-- 消息为空时显示的-->
+										<div th:if="${messageDTO} == null">
+											<h2>&nbsp;&nbsp;暂时没有消息</h2>
+										</div>
+
+										<div class="card-body p-user h-const" style="padding-left: 2rem;">
+											<div class="row" style="height: 100%;">
+												<div class="col-xl-4 msg-lft">
+													<ul class="navbar-nav align-items-center ml-auto">
+														<li class="dropdown-notifications" style="width: 100%;" th:each="message : ${messageList}">
+															<!--		-->
+															<div class="dropdown-menu border-0 show" style="box-shadow: none;" th:data-id="${message.id}" onclick="getOneMessage(this)">
+																<input type="hidden" th:id="'messageId' + ${messageStat.index}" name="messageId" th:value="${message.id}">
+																<a class="dropdown-item dropdown-notifications-item" href="#!"><img class="dropdown-notifications-item-img"
+																	 th:src="@{ ${message.getFromUser().getAvatar()} }" />
+																	<div class="dropdown-notifications-item-content">
+																		<div class="dropdown-notifications-item-content-text" style="max-width: 15rem;" th:text="${message.getContent()}">
+																		</div>
+																		<div class="dropdown-notifications-item-content-details" th:text="${message.getFromUser().getUsername()} + ' · ' +${#dates.format(message.getGmtCreate(), 'MM-dd HH:mm')}">
+																		</div>
+																	</div>
+																</a>
+															</div>
+														</li>
+													</ul>
+												</div>
+												<div class="col-xl-8 card-body" style="padding-bottom: 0; padding-top: 0;" th:if="${messageDTO} != null">
+													<div class="msgdetail" id="msgdetail" style="display: block;">
+														<div th:fragment="reply" id="reply2">
+															<div class="row mb-3">
+																<div class="col-md-2">
+																	<img class="img-fluid show-avatar rounded" th:src="@{${messageDTO.getFromUser().getAvatar()}}">
+																</div>
+																<div class="col-md-10">
+																	<h5 class="card-title row">
+																		<div class="col-12 ht-info">
+																			<a th:href="@{/userinfo(id=${messageDTO.getFromUser().getId()})}">
+																				<p th:text="${messageDTO.getFromUser().getUsername()}"></p>
+																			</a>
+																			<p th:text="${#dates.format(messageDTO.getGmtCreate(), 'MM-dd HH:mm')}"></p>
+																		</div>
+																	</h5>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-12 mb-3 msgmh-30">
+																	<div th:text="${messageDTO.getContent()}"></div>
+																	<br />
+																	<a th:if="${messageDTO.getImg()} != null" th:href="@{${messageDTO.getImg()}}">
+																		<img class="img-fluid mxh-20" th:src="@{${messageDTO.getImg()}}">
+																	</a>
+																	<input id="fromId" type="hidden" th:value="${messageDTO.getToUser()}">
+																	<input id="toId" type="hidden" th:value="${messageDTO.getFromUser().getId()}">
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-xl-12 col-md-12">
+																<div class="mt-3">
+																	<form>
+																		<div class="form-group">
+																			<div class="row">
+																				<div class="emoji" id="emoji"></div>
+
+																				<div class="col-11">
+																					<textarea class="form-control form-control-solid" rows="1" id="content" name="content"></textarea>
+																				</div>
+																				<div class="col-1">
+																					<button class="btn btn-info btn-icon" type="button" onclick="showEmoji()">
+																						<i class="m-2" data-feather="smile"></i>
+																					</button>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="form-group row">
+																			<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3 text-left">
+																				<label for="img" class="btn btn-primary btn-icon mb-0">+</label>
+																				<span id="imgname">
+																					点击选择图片...
+																				</span>
+																				<input type="file" class="form-control-file" id="img">
+																			</div>
+																			<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 text-right">
+																				<button id="postbtn" class="btn btn-green btn-icon" type="button" onclick="sendMessage()">
+																					<div class="loading" id="loading"></div>
+																					<div class="send" id="send">√</div>
+																				</button>
+																				<span>点击发送</span>
+																			</div>
+																		</div>
+																	</form>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</main>
+				<footer class="footer mt-auto footer-light">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-6 small">Copyright &copy; 2020 友人 & 饭盒君 联合出品</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+		<script src="/js/jquery-3.4.1.js"></script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="/js/scripts.js"></script>
+		<script src="/js/comment.js"></script>
+		<script src="/js/message.js"></script>
+		<script src="js/emoji-panel.js"></script>
+		<script>
+      window.onload = function() {
+        if (innerWidth <= 1200) {
+          document.getElementsByClassName("card-body")[0].innerHTML = "请使用电脑端plh进行私信的发送和接收！";
+        }
+      }
+
+			$("#img").on("change", function() {
+				const maxsize = 10 * 1024 * 1024;
+				let size = this.files[0].size;
+
+				//截取路径，获取预览图
+				let urlArr = this.value.split("\\");
+				if (this && this.files && this.files[0]) {
+					let fileUrl = URL.createObjectURL(this.files[0]);
+					document.getElementById("img").src = fileUrl;
+				}
+
+				if (size > maxsize) {
+					document.getElementById("imgname").innerHTML = "这个图片太大了，请换一张！";
+					document.getElementById("imgname").style.color = "#e81500";
+					document.getElementById("postbtn").disabled = true;
+				} else {
+					document.getElementById("imgname").innerHTML = urlArr[2];
+					document.getElementById("imgname").style.color = "#687281";
+					document.getElementById("postbtn").disabled = false;
+				}
+
+			});
+
+			$('.emoji').children().click((emoji) => {
+				if (emoji.target.tagName == "IMG") {
+					let str = $('#content').val();
+					$('#content').val(str + emoji.target.alt);
+				}
+				else {
+					return;
+				}
+			})
+		</script>
+	</body>
+</html>
